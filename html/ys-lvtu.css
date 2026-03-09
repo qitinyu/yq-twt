@@ -9,7 +9,7 @@ body {
     background-color: #f5f5f5;
     overflow-x: hidden;
     color: #000;
-    font-family:"/html/朱雀仿宋.ttf";
+    font-family:"./朱雀仿宋.ttf";
     font-size: 2em;
 }
 
@@ -100,6 +100,55 @@ body {
     transform: scale(1.05);
     opacity: 1;
 }
+.huiyi {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+    gap: 25px;
+    max-width: 1400px;
+    margin: 0 auto;
+    color: #000;
+    text-align: center;
+    justify-content: center;
+    line-height: 100px;
+}
+
+.huiyi1 {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-size: 1.5rem;
+    background-image: url(../tp/ys11.jpg);
+    background-size: cover;
+}
+
+.huiyi1 > a{
+    text-decoration: none;
+    color: #000;
+}
+
+.huiyi1 >a:hover {
+    transition: all 0.2s ease;
+    border-bottom: 3px solid rgb(230, 190, 31);
+    font-weight: bold;
+}
+.huiyi2 {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+
 
 /* 鼠标悬停遮罩层 */
 .hidden-1 {
@@ -300,6 +349,13 @@ body {
 .close-btn:hover {
     transform: rotate(90deg) scale(1.1);
     background: pink;
+}
+.footer {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
 }
 
 /* 移动端适配 */
