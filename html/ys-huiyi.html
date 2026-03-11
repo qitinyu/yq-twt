@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>回忆旅途</title>
+  <link rel="icon" href="https://i.postimg.cc/P58nMvsQ/wang-biao.png">
+
+ <style>
+    :root {
+      --bg: #ffffff;
+      --bg-elevated: #fafafa;
+      --fg: #1a1a1a;
+      --muted: #71717a;
+      --accent: #e8f1f1;
+      --accent-light: rgba(13, 148, 136, 0.1);
+      --accent-glow: rgba(13, 148, 136, 0.2);
+      --card: #f4f4f5;
+      --border: #e4e4e7;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: "./朱雀仿宋.ttf";
+    }
+
+    .font-display {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .containt {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    /* 图标行 - 居中显示 */
+    .icon-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      border-radius: 50%;
+    }
+
+    .tp {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .tp:hover {
+      transform: translate3d(0, -2px, 0);
+      border-color: burlywood;
+    }
+
+    .tp img {
+      width: 40px;
+      height: 40px;
+      stroke: var(--muted);
+      transition: stroke 0.25s ease;
+      /* background-color: #1a1a1a; */
+      border-radius: 50%;
+    }
+
+    .tp:hover img {
+      stroke: var(--accent);
+    }
+
+    .tp.active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .tp.active svg {
+      stroke: white;
+    }
+
+    /* 标签行 - 居中显示 */
+    .tag-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag-row span {
+      padding: 8px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tag-row span:hover {
+      color: var(--fg);
+      border-color: var(--accent);
+      background: var(--accent-light);
+      transform: translateY(-1px);
+    }
+
+    .tag-row span.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* Main Content */
+    .main-content {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* Left Panel */
+    .left {
+      width: 360px;
+      min-width: 300px;
+      background: var(--bg-elevated);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      gap: 16px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      flex: 1;
+      overflow-y: auto;
+      align-content: start;
+      padding-right: 4px;
+    }
+
+    .preview-grid::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .preview-grid::-webkit-scrollbar-track {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .preview-grid::-webkit-scrollbar-thumb {
+      background: var(--muted);
+      border-radius: 2px;
+    }
+
+    .xt {
+      aspect-ratio: 4/3;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .xt img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .xt:hover {
+      transform: scale(1.02);
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+
+    .xt:hover img {
+      transform: scale(1.08);
+    }
+
+    .xt.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .xt-index {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 22px;
+      height: 22px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--fg);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .xt:hover .xt-index,
+    .xt.active .xt-index {
+      opacity: 1;
+    }
+
+    /* Right Panel */
+    .right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      background: var(--bg);
+      position: relative;
+    }
+
+    .main-display {
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 16/10;
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 24px 48px var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .main-display img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.4s ease;
+    }
+
+    .display-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 24px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    }
+
+    .display-info h2 {
+      font-size: 24px;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    .display-info p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* Progress indicator */
+    .progress-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0;
+    }
+
+    /* Category label */
+    .category-label {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    /* Current category indicator */
+    .current-category {
+      padding: 12px 16px;
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .current-category h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .current-category p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .left {
+        width: 320px;
+        min-width: 260px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .main-content {
+        flex-direction: column;
+      }
+
+      .left {
+        width: 100%;
+        min-width: auto;
+        max-height: 45vh;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .preview-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .right {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .top-nav {
+        padding: 12px 16px;
+      }
+
+      .tp {
+        width: 40px;
+        height: 40px;
+      }
+
+      .tp svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .tag-row span {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .left {
+        padding: 16px;
+      }
+
+      .preview-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Entrance animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      opacity: 0;
+    }
+
+    .delay-1 { animation-delay: 0.05s; }
+    .delay-2 { animation-delay: 0.1s; }
+    .delay-3 { animation-delay: 0.15s; }
+    .delay-4 { animation-delay: 0.2s; }
+    .delay-5 { animation-delay: 0.25s; }
+    .delay-6 { animation-delay: 0.3s; }
+    .delay-7 { animation-delay: 0.35s; }
+    .delay-8 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+  
+  <div class="containt">
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+      <!-- 第一行：8个图标 - 居中显示 -->
+      <div class="icon-row">
+        <div class="tp" data-category="0" tabindex="0" role="button"  title="蒙德">
+          <img src="../tp/md.webp" alt="">
+        </div>
+        <div class="tp" data-category="1" tabindex="0" role="button"  title="璃月">
+          <img src="../tp/ly.webp" alt="">
+        </div>
+        <div class="tp" data-category="2" tabindex="0" role="button"  title="稻妻">
+          <img src="../tp/dq.webp" alt="">
+        </div>
+        <div class="tp" data-category="3" tabindex="0" role="button"  title="须弥">
+          <img src="../tp/xm.webp" alt="">
+        </div>
+        <div class="tp" data-category="4" tabindex="0" role="button"  title="枫丹">
+          <img src="../tp/fd.webp" alt="">
+        </div>
+        <div class="tp" data-category="5" tabindex="0" role="button"  title="纳塔">
+          <img src="../tp/nt.webp" alt="">
+        </div>
+        <div class="tp" data-category="6" tabindex="0" role="button"  title="至冬">
+          <img src="../tp/冰.png" alt="">
+        </div>
+        <div class="tp" data-category="7" tabindex="0" role="button"  title="挪德卡莱">
+          <img src="../tp/ndkl.webp" alt="">
+        </div>
+      </div>
+      
+      <!-- 第二行：8个标签 - 居中显示 -->
+      <div class="tag-row">
+        <span class="animate-in delay-1" data-view="0">蒙德</span>
+        <span class="animate-in delay-2" data-view="1">璃月</span>
+        <span class="animate-in delay-3" data-view="2">稻妻</span>
+        <span class="animate-in delay-4" data-view="3">须弥</span>
+        <span class="animate-in delay-5" data-view="4">枫丹</span>
+        <span class="animate-in delay-6" data-view="5">纳塔</span>
+        <span class="animate-in delay-7" data-view="6">至冬</span>
+        <span class="animate-in delay-8" data-view="7">挪德卡莱</span>
+      </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Left Panel -->
+      <div class="left">
+        <div class="current-category">
+          <h3 id="categoryTitle">首页</h3>
+          <p id="categoryDesc">浏览精选图片集</p>
+        </div>
+        
+        <div class="section-title">图片预览</div>
+        <div class="preview-grid" id="previewGrid">
+          <!-- 预览图通过JS生成 -->
+        </div>
+      </div>
+      
+      <!-- Right Panel -->
+      <div class="right">
+        <div class="main-display" id="mainDisplay">
+          <img id="mainImage" src="" alt="主展示图">
+          <div class="category-label" id="displayCategory">首页</div>
+          <div class="display-info">
+            <h2 class="font-display" id="displayTitle">选择一张图片</h2>
+            <p id="displayDesc">点击左侧预览图查看大图</p>
+          </div>
+          <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // 数据配置区 - 可以在此修改每个分类的图片
+    // ============================================
+    
+    // 第一行图标对应的分类数据（8个分类）
+    const categoriesData = [
+      {
+        id: 0,
+        name: '蒙德',
+        desc: '浏览精选图片集',
+        images: [
+          { id: 1, url: '../hy/温迪-立绘.png', title: '晨光熹微', desc: '清晨第一缕阳光' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=102', title: '午后时光', desc: '慵懒的下午茶' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=103', title: '黄昏漫步', desc: '夕阳下的街道' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=104', title: '夜色阑珊', desc: '城市的夜晚' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=105', title: '星河璀璨', desc: '仰望星空' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=106', title: '雨后初晴', desc: '彩虹与水珠' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=107', title: '四季轮回', desc: '时光的印记' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=108', title: '岁月静好', desc: '平静的画面' }
+        ]
+      },
+      {
+        id: 1,
+        name: '璃月',
+        desc: '大自然的壮丽景色',
+        images: [
+          { id: 1, url: '../hy/钟离-立绘.png', title: '山峦叠嶂', desc: '连绵起伏的山脉' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=202', title: '碧海蓝天', desc: '无尽的海岸线' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=203', title: '森林秘境', desc: '幽深的原始森林' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=204', title: '沙漠孤烟', desc: '广袤的沙漠' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=205', title: '瀑布飞流', desc: '壮观的水流' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=206', title: '草原牧歌', desc: '辽阔的草原' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=207', title: '雪山巍峨', desc: '洁白的雪峰' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=208', title: '湖光山色', desc: '倒映的湖面' }
+        ]
+      },
+      {
+        id: 2,
+        name: '人物',
+        desc: '人物肖像与故事',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=301', title: '微笑少女', desc: '灿烂的笑容' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=302', title: '沉思者', desc: '深邃的眼神' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=303', title: '舞者', desc: '优雅的姿态' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=304', title: '匠人', desc: '专注的背影' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=305', title: '孩童', desc: '纯真的童年' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=306', title: '老者', desc: '岁月的痕迹' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=307', title: '运动员', desc: '力与美的结合' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=308', title: '艺术家', desc: '创作的瞬间' }
+        ]
+      },
+      {
+        id: 3,
+        name: '建筑',
+        desc: '人类文明的印记',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=401', title: '摩天大楼', desc: '现代都市地标' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=402', title: '古典教堂', desc: '哥特式建筑' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=403', title: '传统民居', desc: '古朴的院落' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=404', title: '桥梁工程', desc: '连接的纽带' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=405', title: '博物馆', desc: '文化殿堂' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=406', title: '火车站', desc: '交通枢纽' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=407', title: '体育馆', desc: '现代设计' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=408', title: '古城遗迹', desc: '历史的回响' }
+        ]
+      },
+      {
+        id: 4,
+        name: '美食',
+        desc: '舌尖上的艺术',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=501', title: '精致甜点', desc: '甜蜜的诱惑' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=502', title: '新鲜果蔬', desc: '自然的馈赠' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=503', title: '异国料理', desc: '环球美食' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=504', title: '街头小吃', desc: '烟火气息' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=505', title: '咖啡时光', desc: '香醇浓郁' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=506', title: '海鲜盛宴', desc: '海洋的鲜味' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=507', title: '烘焙艺术', desc: '面粉的魔法' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=508', title: '健康轻食', desc: '营养均衡' }
+        ]
+      },
+      {
+        id: 5,
+        name: '动物',
+        desc: '自然的精灵',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=601', title: '威严狮子', desc: '草原之王' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=602', title: '灵动飞鸟', desc: '自由的翅膀' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=603', title: '海洋生物', desc: '深海的奥秘' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=604', title: '可爱萌宠', desc: '治愈系伙伴' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=605', title: '蝴蝶翩跹', desc: '花间精灵' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=606', title: '森林动物', desc: '林中居民' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=607', title: '极地生灵', desc: '冰雪世界' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=608', title: '野生动物', desc: '自然之野' }
+        ]
+      },
+      {
+        id: 6,
+        name: '艺术',
+        desc: '创意与灵感的碰撞',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=701', title: '抽象画作', desc: '色彩的对话' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=702', title: '雕塑艺术', desc: '立体的诗篇' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=703', title: '装置艺术', desc: '空间的语言' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=704', title: '光影艺术', desc: '光的魔法' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=705', title: '数字艺术', desc: '科技与美学' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=706', title: '街头艺术', desc: '城市的涂鸦' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=707', title: '摄影艺术', desc: '镜头下的世界' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=708', title: '手工艺术', desc: '匠心的温度' }
+        ]
+      },
+      {
+        id: 7,
+        name: '收藏',
+        desc: '我的个人收藏',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=801', title: '珍藏一', desc: '个人收藏作品' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=802', title: '珍藏二', desc: '个人收藏作品' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=803', title: '珍藏三', desc: '个人收藏作品' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=804', title: '珍藏四', desc: '个人收藏作品' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=805', title: '珍藏五', desc: '个人收藏作品' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=806', title: '珍藏六', desc: '个人收藏作品' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=807', title: '珍藏七', desc: '个人收藏作品' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=808', title: '珍藏八', desc: '个人收藏作品' }
+        ]
+      }
+    ];
+
+    // 第二行标签对应的视图数据（8个视图，每个视图展示不同的图片组合）
+    const viewsData = [
+      {
+        id: 0,
+        name: '全部展示',
+        desc: '浏览所有精彩内容',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=v1-', title: '综合精选一', desc: '来自各分类的精选' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=v1-', title: '综合精选二', desc: '来自各分类的精选' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=v1-', title: '综合精选三', desc: '来自各分类的精选' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=v1-', title: '综合精选四', desc: '来自各分类的精选' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=v1-', title: '综合精选五', desc: '来自各分类的精选' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=v1-', title: '综合精选六', desc: '来自各分类的精选' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=v1-', title: '综合精选七', desc: '来自各分类的精选' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=v1-', title: '综合精选八', desc: '来自各分类的精选' }
+        ]
+      },
+      {
+        id: 1,
+        name: '精选推荐',
+        desc: '编辑精心挑选的优质内容',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=v2-1', title: '精选推荐一', desc: '编辑力荐' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=v2-2', title: '精选推荐二', desc: '编辑力荐' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=v2-3', title: '精选推荐三', desc: '编辑力荐' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=v2-4', title: '精选推荐四', desc: '编辑力荐' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=v2-5', title: '精选推荐五', desc: '编辑力荐' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=v2-6', title: '精选推荐六', desc: '编辑力荐' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=v2-7', title: '精选推荐七', desc: '编辑力荐' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=v2-8', title: '精选推荐八', desc: '编辑力荐' }
+        ]
+      },
+      {
+        id: 2,
+        name: '最新上传',
+        desc: '最新发布的精彩作品',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=v3-1', title: '最新作品一', desc: '刚刚上传' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=v3-2', title: '最新作品二', desc: '刚刚上传' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=v3-3', title: '最新作品三', desc: '刚刚上传' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=v3-4', title: '最新作品四', desc: '刚刚上传' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=v3-5', title: '最新作品五', desc: '刚刚上传' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=v3-6', title: '最新作品六', desc: '刚刚上传' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=v3-7', title: '最新作品七', desc: '刚刚上传' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=v3-8', title: '最新作品八', desc: '刚刚上传' }
+        ]
+      },
+      {
+        id: 3,
+        name: '热门排行',
+        desc: '最受欢迎的作品',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=v4-1', title: '热门作品一', desc: '人气爆棚' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=v4-2', title: '热门作品二', desc: '人气爆棚' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=v4-3', title: '热门作品三', desc: '人气爆棚' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=v4-4', title: '热门作品四', desc: '人气爆棚' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=v4-5', title: '热门作品五', desc: '人气爆棚' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=v4-6', title: '热门作品六', desc: '人气爆棚' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=v4-7', title: '热门作品七', desc: '人气爆棚' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=v4-8', title: '热门作品八', desc: '人气爆棚' }
+        ]
+      },
+      {
+        id: 4,
+        name: '编辑精选',
+        desc: '专业编辑团队推荐',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=v5-1', title: '编辑精选一', desc: '专业甄选' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=v5-2', title: '编辑精选二', desc: '专业甄选' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=v5-3', title: '编辑精选三', desc: '专业甄选' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=v5-4', title: '编辑精选四', desc: '专业甄选' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=v5-5', title: '编辑精选五', desc: '专业甄选' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=v5-6', title: '编辑精选六', desc: '专业甄选' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=v5-7', title: '编辑精选七', desc: '专业甄选' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=v5-8', title: '编辑精选八', desc: '专业甄选' }
+        ]
+      },
+      {
+        id: 5,
+        name: '季节专题',
+        desc: '当季特色内容',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=v6-1', title: '季节专题一', desc: '应季精选' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=v6-2', title: '季节专题二', desc: '应季精选' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=v6-3', title: '季节专题三', desc: '应季精选' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=v6-4', title: '季节专题四', desc: '应季精选' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=v6-5', title: '季节专题五', desc: '应季精选' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=v6-6', title: '季节专题六', desc: '应季精选' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=v6-7', title: '季节专题七', desc: '应季精选' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=v6-8', title: '季节专题八', desc: '应季精选' }
+        ]
+      },
+      {
+        id: 6,
+        name: '趋势榜单',
+        desc: '当前流行趋势',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=v7-1', title: '趋势榜单一', desc: '正在流行' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=v7-2', title: '趋势榜单二', desc: '正在流行' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=v7-3', title: '趋势榜单三', desc: '正在流行' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=v7-4', title: '趋势榜单四', desc: '正在流行' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=v7-5', title: '趋势榜单五', desc: '正在流行' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=v7-6', title: '趋势榜单六', desc: '正在流行' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=v7-7', title: '趋势榜单七', desc: '正在流行' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=v7-8', title: '趋势榜单八', desc: '正在流行' }
+        ]
+      },
+      {
+        id: 7,
+        name: '随机发现',
+        desc: '探索未知惊喜',
+        images: [
+          { id: 1, url: 'https://picsum.photos/800/600?random=v8-1', title: '随机发现一', desc: '意外惊喜' },
+          { id: 2, url: 'https://picsum.photos/800/600?random=v8-2', title: '随机发现二', desc: '意外惊喜' },
+          { id: 3, url: 'https://picsum.photos/800/600?random=v8-3', title: '随机发现三', desc: '意外惊喜' },
+          { id: 4, url: 'https://picsum.photos/800/600?random=v8-4', title: '随机发现四', desc: '意外惊喜' },
+          { id: 5, url: 'https://picsum.photos/800/600?random=v8-5', title: '随机发现五', desc: '意外惊喜' },
+          { id: 6, url: 'https://picsum.photos/800/600?random=v8-6', title: '随机发现六', desc: '意外惊喜' },
+          { id: 7, url: 'https://picsum.photos/800/600?random=v8-7', title: '随机发现七', desc: '意外惊喜' },
+          { id: 8, url: 'https://picsum.photos/800/600?random=v8-8', title: '随机发现八', desc: '意外惊喜' }
+        ]
+      }
+    ];
+
+    // ============================================
+    // 状态变量
+    // ============================================
+    let currentMode = 'category'; // 'category' 或 'view'
+    let currentCategoryIndex = 0;
+    let currentViewIndex = -1;
+    let currentImageIndex = 0;
+    let autoPlayTimer = null;
+    const AUTO_PLAY_INTERVAL = 4000;
+
+    // ============================================
+    // DOM 元素引用
+    // ============================================
+    const previewGrid = document.getElementById('previewGrid');
+    const mainImage = document.getElementById('mainImage');
+    const displayTitle = document.getElementById('displayTitle');
+    const displayDesc = document.getElementById('displayDesc');
+    const displayCategory = document.getElementById('displayCategory');
+    const categoryTitle = document.getElementById('categoryTitle');
+    const categoryDesc = document.getElementById('categoryDesc');
+    const progressBar = document.getElementById('progressBar');
+
+    // ============================================
+    // 核心功能函数
+    // ============================================
+
+    // 获取当前显示的图片列表
+    function getCurrentImages() {
+      if (currentMode === 'view' && currentViewIndex >= 0) {
+        return viewsData[currentViewIndex].images;
+      }
+      return categoriesData[currentCategoryIndex].images;
+    }
+
+    // 获取当前显示的名称和描述
+    function getCurrentInfo() {
+      if (currentMode === 'view' && currentViewIndex >= 0) {
+        return {
+          name: viewsData[currentViewIndex].name,
+          desc: viewsData[currentViewIndex].desc
+        };
+      }
+      return {
+        name: categoriesData[currentCategoryIndex].name,
+        desc: categoriesData[currentCategoryIndex].desc
+      };
+    }
+
+    // 渲染预览图
+    function renderPreviews() {
+      const images = getCurrentImages();
+      if (!images || images.length === 0) return;
+
+      previewGrid.innerHTML = '';
+      
+      images.forEach((img, index) => {
+        const div = document.createElement('div');
+        div.className = 'xt';
+        div.dataset.imageIndex = index;
+        div.setAttribute('tabindex', '0');
+        div.setAttribute('role', 'button');
+        div.setAttribute('aria-label', `查看图片: ${img.title}`);
+        
+        div.innerHTML = `
+          <img src="${img.url}" alt="${img.title}" loading="lazy">
+          <span class="xt-index">${index + 1}</span>
+        `;
+        
+        // 点击事件
+        div.addEventListener('click', () => selectImage(index));
+        
+        // 键盘事件
+        div.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectImage(index);
+          }
+        });
+        
+        previewGrid.appendChild(div);
+      });
+    }
+
+    // 选择图片并显示大图
+    function selectImage(index) {
+      const images = getCurrentImages();
+      if (!images || index < 0 || index >= images.length) return;
+
+      currentImageIndex = index;
+      const img = images[index];
+      const info = getCurrentInfo();
+
+      // 更新预览图选中状态
+      document.querySelectorAll('.xt').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+
+      // 更新主图显示
+      mainImage.style.opacity = '0';
+      setTimeout(() => {
+        mainImage.src = img.url;
+        mainImage.alt = img.title;
+        displayTitle.textContent = img.title;
+        displayDesc.textContent = img.desc;
+        displayCategory.textContent = info.name;
+        mainImage.style.opacity = '1';
+      }, 200);
+
+      // 重置自动播放
+      resetAutoPlay();
+    }
+
+    // 切换分类（第一行图标）
+    function switchCategory(categoryIndex) {
+      if (categoryIndex < 0 || categoryIndex >= categoriesData.length) return;
+
+      currentMode = 'category';
+      currentCategoryIndex = categoryIndex;
+      currentViewIndex = -1;
+      currentImageIndex = 0;
+
+      const category = categoriesData[categoryIndex];
+      
+      // 更新图标选中状态
+      document.querySelectorAll('.tp').forEach((el) => {
+        el.classList.toggle('active', parseInt(el.dataset.category) === categoryIndex);
+      });
+
+      // 清除标签选中状态
+      document.querySelectorAll('.tag-row span').forEach((el) => {
+        el.classList.remove('active');
+      });
+
+      // 更新分类标题
+      categoryTitle.textContent = category.name;
+      categoryDesc.textContent = category.desc;
+
+      // 重新渲染预览图
+      renderPreviews();
+
+      // 显示第一张图片
+      setTimeout(() => selectImage(0), 100);
+    }
+
+    // 切换视图（第二行标签）
+    function switchView(viewIndex) {
+      if (viewIndex < 0 || viewIndex >= viewsData.length) return;
+
+      currentMode = 'view';
+      currentViewIndex = viewIndex;
+      currentImageIndex = 0;
+
+      const view = viewsData[viewIndex];
+      
+      // 更新标签选中状态
+      document.querySelectorAll('.tag-row span').forEach((el) => {
+        el.classList.toggle('active', parseInt(el.dataset.view) === viewIndex);
+      });
+
+      // 清除图标选中状态
+      document.querySelectorAll('.tp').forEach((el) => {
+        el.classList.remove('active');
+      });
+
+      // 更新分类标题
+      categoryTitle.textContent = view.name;
+      categoryDesc.textContent = view.desc;
+
+      // 重新渲染预览图
+      renderPreviews();
+
+      // 显示第一张图片
+      setTimeout(() => selectImage(0), 100);
+    }
+
+    // ============================================
+    // 自动播放功能
+    // ============================================
+    
+    function startAutoPlay() {
+      stopAutoPlay();
+      
+      autoPlayTimer = setInterval(() => {
+        const images = getCurrentImages();
+        if (!images || images.length === 0) return;
+        
+        const nextIndex = (currentImageIndex + 1) % images.length;
+        selectImage(nextIndex);
+      }, AUTO_PLAY_INTERVAL);
+      
+      // 启动进度条动画
+      animateProgress();
+    }
+
+    function stopAutoPlay() {
+      if (autoPlayTimer) {
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+      }
+    }
+
+    function resetAutoPlay() {
+      stopAutoPlay();
+      startAutoPlay();
+    }
+
+    function animateProgress() {
+      progressBar.style.transition = 'none';
+      progressBar.style.width = '0';
+      
+      requestAnimationFrame(() => {
+        progressBar.style.transition = `width ${AUTO_PLAY_INTERVAL}ms linear`;
+        progressBar.style.width = '100%';
+      });
+    }
+
+    // ============================================
+    // 事件绑定
+    // ============================================
+
+    // 绑定第一行图标点击事件
+    document.querySelectorAll('.tp').forEach(tp => {
+      const handler = () => {
+        const categoryIndex = parseInt(tp.dataset.category);
+        if (!isNaN(categoryIndex)) {
+          switchCategory(categoryIndex);
+        }
+      };
+
+      tp.addEventListener('click', handler);
+      tp.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handler();
+        }
+      });
+    });
+
+    // 绑定第二行标签点击事件
+    document.querySelectorAll('.tag-row span').forEach(tag => {
+      const handler = () => {
+        const viewIndex = parseInt(tag.dataset.view);
+        if (!isNaN(viewIndex)) {
+          switchView(viewIndex);
+        }
+      };
+
+      tag.addEventListener('click', handler);
+      tag.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handler();
+        }
+      });
+    });
+
+    // 鼠标悬停时暂停自动播放
+    previewGrid.addEventListener('mouseenter', stopAutoPlay);
+    previewGrid.addEventListener('mouseleave', startAutoPlay);
+
+    // ============================================
+    // 初始化
+    // ============================================
+    function init() {
+      renderPreviews();
+      setTimeout(() => selectImage(0), 300);
+      startAutoPlay();
+    }
+
+    // 确保DOM加载完成后初始化
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>
